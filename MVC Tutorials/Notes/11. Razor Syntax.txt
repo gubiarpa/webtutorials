@@ -1,0 +1,115 @@
+XI      RAZOR SYNTAX
+
+>   Intro
+
+    Razor es uno de los motores de visualización admitidos en ASP.NET MVC.
+    Razor le permite escribir una combinación de código HTML y servidor con C# o Visual Basic.
+    Un archivo Razor con sintaxis Visual Basic tiene la extensión de archivo .vbhtml y C# syntax tiene la extensión de archivo .cshtml.
+
+    La sintaxis de Razor tiene las siguientes características:
+
+    •   Compacto
+        La sintaxis de Razor es compacta, lo que le permite minimizar el número de caracteres y las teclas necesarias para escribir un código.
+    •   Fácil de aprender
+        La sintaxis de Razor es fácil de aprender donde puedes usar tu lenguaje familiar C# o Visual Basic.
+    •   Intellisense
+        La sintaxis de Razor admite la finalización de sentencias en Visual Studio.
+
+    Ahora, vamos a aprender cómo escribir código Razor
+    
+>   Inline expression
+
+    Comienza con el símbolo @ para escribir el código C# o VB del lado del servidor con el código HTML.
+    Por ejemplo, escriba @Variable_Name para mostrar un valor de una variable del lado del servidor.
+    Por ejemplo, DateTime.Now devuelve una fecha y hora actuales.
+    Por lo tanto, escriba @DateTime y se mostrará la fecha y hora actual como se muestra a continuación.
+    Una sola línea de expresión no requiere un punto y coma al final de la expresión.
+
+        <h1>Razor syntax demo</h1>
+        <h2>@DateTime.Now.ToShortDateString()</h2>
+
+>   Multi-statement Code block
+    
+    Puede escribir varias líneas de código del lado del servidor entre corchetes @ {...}.
+    Cada línea debe terminar con un punto y coma igual que C#.
+
+        @{
+            var date = DateTime.Now.ToShortDateString();
+            var message = "Hello World";
+        }
+        <h2>Today's date is: @date </h2>
+        <h3>@message</h3>
+
+>   Display Text from Code Block
+
+    Use @: o <text> / <text> para mostrar textos dentro del bloque de código.
+
+        @{
+            var date = DateTime.Now.ToShortDateString();
+            string message = "Hello World!";
+            @:Today's date is: @date <br />
+            @message                               
+        }
+
+    Que es lo mismo que...
+
+        @{
+            var date = DateTime.Now.ToShortDateString();
+            string message = "Hello World!";
+            <text>Today's date is:</text> @date <br />
+            @message                               
+        }
+
+>   if-else condition
+
+    Escriba la condición if-else comenzando con el símbolo @.
+    El bloque de código if-else debe estar entre llaves {}, incluso para una sola declaración.
+
+        @if(DateTime.IsLeapYear(DateTime.Now.Year) )
+        {
+            @DateTime.Now.Year @:is a leap year.
+        }
+        else { 
+            @DateTime.Now.Year @:is not a leap year.
+        }
+
+>   for-loop
+
+        @for (int i = 0; i < 5; i++) { 
+            @i.ToString() <br />
+        }
+
+>   Model
+
+    Use @model to use model object anywhere in the view.
+
+        @model Student
+
+        <h2>Student Detail:</h2>
+        <ul>
+            <li>Student Id: @Model.StudentId</li>
+            <li>Student Name: @Model.StudentName</li>
+            <li>Age: @Model.Age</li>
+        </ul>
+
+>   Declare Variables
+
+    Declare una variable en un bloque de código encerrado entre paréntesis y luego use esas variables dentro de html con el símbolo @.
+
+        @{ 
+            string str = "";
+
+            if(1 > 0)
+            {
+                str = "Hello World!";
+            }
+        }
+        <p>@str</p>
+
+♫   Puntos para recordar :
+    ♪   Use @ para escribir el código del lado del servidor.
+    ♪   El bloque de código del lado del servidor comienza con @ {* código *}
+    ♪   Use @: o <text> </ <text> para mostrar el texto del bloque de código.
+    ♪   Las estructuras condicionales comienza con @if {}
+    ♪   for loop comienza con @for
+    ♪   @model le permite usar el objeto Model en cualquier lugar de la vista.

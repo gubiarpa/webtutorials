@@ -1,0 +1,54 @@
+I       MVC STRUCTURE
+
+>   App_Data
+    Puede contener archivos de datos de aplicaciones como LocalDB, archivos .mdf, archivos xml y otros archivos relacionados con los datos.
+    IIS nunca servirá archivos de la carpeta App_Data.
+
+>   App_Start
+    Puede contener archivos de clase que se ejecutarán cuando se inicie la aplicación.
+    Normalmente, estos serían archivos de configuración como AuthConfig.cs, BundleConfig.cs, FilterConfig.cs, RouteConfig.cs etc.
+    MVC 5 incluye BundleConfig.cs, FilterConfig.cs y RouteConfig.cs de forma predeterminada. Veremos el significado de estos archivos más adelante.
+
+>   Content
+    Contiene archivos estáticos como archivos css, archivos de imágenes e iconos.
+    La aplicación MVC 5 incluye bootstrap.css, bootstrap.min.css y Site.css de forma predeterminada.
+
+>   Controllers
+    Contiene archivos de clase para los controladores.
+    Los controladores manejan la solicitud de los usuarios y devuelven una respuesta.
+    MVC requiere que el nombre de todos los archivos del controlador finalice con "Controller".
+    Aprenderás sobre el controlador en la siguiente sección.
+
+>   fonts
+    Contiene archivos de fuentes personalizados para su aplicación.
+
+>   Models
+    Contiene archivos de clase de modelo.
+    Normalmente, la clase del modelo incluye propiedades públicas, que serán utilizadas por la aplicación para mantener y manipular los datos de la aplicación.
+
+>   Scripts
+    Contiene archivos JavaScript o VBScript para la aplicación.
+    MVC 5 incluye archivos javascript para bootstrap, jquery 1.10 y modernizador por defecto.
+
+>   Views
+    Contiene archivos HTML para la aplicación.
+    Normalmente, ver archivo es un archivo .cshtml en el que se escribe html y código C # o VB.NET.
+    La carpeta de vistas incluye una carpeta separada para cada controlador.
+    Por ejemplo, todos los archivos .cshtml, que serán procesados por HomeController, estarán en la carpeta Ver > Inicio.
+    La carpeta compartida en la carpeta Ver contiene todas las vistas que se compartirán entre diferentes controladores, por ejemplo. archivos de diseño.
+
+Además, el proyecto MVC también incluye los siguientes archivos de configuración:
+
+>   Global.asax
+    Permite escribir código que se ejecuta en respuesta a eventos de nivel de aplicación, como las siguientes:
+        Application_BeginRequest
+        Application_start
+        Application_error
+        Session_Start
+        Session_End
+
+>   Packages.config
+    NuGet administra el archivo Packages.config para realizar un seguimiento de los paquetes y las versiones que tiene instaladas en la aplicación.
+
+>   Web.config
+    El archivo web.config contiene configuraciones de nivel de aplicación.

@@ -1,0 +1,103 @@
+II      ROUTING
+
+>   Configure Route
+
+    Cada aplicación MVC debe configurar (registrar) al menos una ruta, que está configurada por MVC Framework de forma predeterminada.
+    Puede registrar una ruta en la clase RouteConfig, que se encuentra en RouteConfig.cs en la carpeta App_Start.
+
+>   URL Pattern
+
+    El patrón de URL se considera solo después de la parte del nombre de dominio en la URL.
+    Por ejemplo, el patrón de URL "{controller}/{action}/{id}" se vería como localhost:1234/{controller}/{action}/{id}.
+    Cualquier cosa después de "localhost:1234/" se considerará como nombre del controlador.
+    De la misma manera, cualquier cosa después del nombre del controlador se considerará como el nombre de la acción y luego el valor del parámetro id.
+    Si la URL no contiene nada después del nombre de dominio, entonces el controlador predeterminado y el método de acción manejarán la solicitud.
+    Por ejemplo, http://localhost:1234 sería manejado por HomeController y el método de índice según lo configurado en el parámetro de valores predeterminados.
+    La siguiente tabla muestra qué Controlador, método de acción y parámetro de identificación manejarían diferentes URL considerando la ruta predeterminada anterior.
+
+        http://localhost/home                   HomeController          Index       null
+        http://localhost/home/index/123         HomeController          Index       123
+        http://localhost/home/about             HomeController          About       null
+        http://localhost/home/contact           HomeController          Contact     null
+        http://localhost/student                StudentController       Index       null
+        http://localhost/student/edit/123       StudentController       Edit        123
+
+>   Multiple Routes
+
+    También puede configurar una ruta personalizada utilizando el método de extensión MapRoute.
+    Debe proporcionar al menos dos parámetros en MapRoute, nombre de ruta y patrón de url. El parámetro Valores predeterminados es opcional.
+    Puede registrar múltiples rutas personalizadas con diferentes nombres.
+    Considere el siguiente ejemplo donde registramos la ruta "Estudiante".
+    
+        public class RouteConfig
+        {
+            public static void RegisterRoutes(RouteCollection routes)
+            {
+                routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+                routes.MapRoute(
+                    name: "Student",
+                    url: "students/{id}",
+                    defaults: new { controller = "Student", action = "Index"}
+                );
+
+                routes.MapRoute(
+                    name: "Default",
+                    url: "{controller}/{action}/{id}",
+                    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                );
+            }
+        }
+
+    Como se muestra en el código anterior, el patrón de URL para la ruta de Students es students/{id},
+        que especifica que cualquier URL que comience con nombre de {nombreDominio}/students,debe ser manejado por StudentController.
+    Tenga en cuenta que no hemos especificado {acción} en el patrón de URL porque queremos que todas las URL que comiencen
+        con el estudiante siempre deben usar la acción Index de StudentController.
+    Hemos especificado el controlador y la acción predeterminados para manejar cualquier solicitud de URL que comience desde el nombre de dominio "/students".
+
+    El marco MVC evalúa cada ruta en secuencia.
+    Comienza con la primera ruta configurada y si la URL entrante no satisface el patrón de URL de la ruta, evaluará la segunda ruta y así sucesivamente.
+    En el ejemplo anterior, el motor de enrutamiento evaluará primero la ruta del Estudiante y si la URL entrante no comienza con "/students",
+        entonces solo considerará la segunda ruta, que es la ruta predeterminada.
+
+        http://localhost/student/123            StudentController	Index	123
+        http://localhost/student/index/123      StudentController	Index	123
+        http://localhost/student?Id=123         StudentController	Index	123
+
+>   Route Constraints
+
+    También puede aplicar restricciones en el valor del parámetro configurando restricciones de ruta.
+    Por ejemplo, la siguiente ruta aplica una restricción en el parámetro id que el valor de una id debe ser numérico.
+
+        routes.MapRoute(
+            name: "Student",
+            url: "student/{id}/{name}/{standardId}",
+            defaults: new {
+                controller = "Student", action = "Index", id = UrlParameter.Optional,
+                name = UrlParameter.Optional, standardId = UrlParameter.Optional
+            },
+            constraints: new { id = @"\d+" }
+        );
+
+    Entonces, si da un valor no numérico para el parámetro id, entonces esa solicitud será manejada por otra ruta o,
+        si no hay rutas coincidentes, se lanzará el error "No se pudo encontrar el recurso".
+
+>   Register Routes
+
+    Ahora, después de configurar todas las rutas en la clase RouteConfig, debe registrarlo en el evento Application_Start () en Global.asax.
+    Para que incluya todas tus rutas en RouteTable.
+
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        protected void Application_Start()
+        {
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+        }
+    }
+
+♫   Points to Remember :
+    ♪   El enrutamiento juega un papel importante en el Framewwork MVC. El enrutamiento mapea la URL a un archivo o clase física (clase de controlador en MVC).
+    ♪   La ruta contiene el patrón de URL y la información del controlador. El patrón de URL comienza después del nombre de dominio.
+    ♪   Las rutas se pueden configurar en la clase RouteConfig. También se pueden configurar múltiples rutas personalizadas.
+    ♪   Las restricciones de ruta (Route Contraints) aplican restricciones sobre el valor de los parámetros.
+    ♪   La ruta debe estar registrada en el evento Application_Start en el archivo Global.ascx.cs.

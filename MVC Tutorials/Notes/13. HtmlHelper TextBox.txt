@@ -1,0 +1,89 @@
+XVIII   HTMLHELPER TEXTBOX
+
+>   Intro
+
+    Aprenda a generar el control de cuadro de texto usando HtmlHelper en la vista Razor en esta sección.
+    La clase HtmlHelper incluye dos métodos de extensión que crean un elemento de cuadro de texto (<input type = "text">)
+        en la vista Razor: TextBox() y TextBoxFor().
+    El método TextBox() es un método de escritura flexible, mientras que TextBoxFor() es un método fuertemente tipado.
+    Usaremos el siguiente modelo de Student con el método TextBox() y TextBoxFor().
+
+        public class Student
+        {
+            public int StudentId { get; set; }
+            [Display(Name="Name")]
+            public string StudentName { get; set; }
+            public int Age { get; set; }
+            public bool isNewlyEnrolled { get; set; }
+            public string Password { get; set; }
+        }
+
+>   TextBox
+
+    El método Html.TextBox() crea el elemento <input type = "text"> con el nombre, el valor y los atributos html especificados.
+    Definición:
+
+    •   MvcHtmlString Html.TextBox(string name, string value, object htmlAttributes)
+
+    El método TextBox() es un método que se escribe libremente porque el parámetro name es una cadena.
+    El parámetro de name puede ser un nombre de propiedad del objeto modelo.
+    Se une propiedad especificada con cuadro de texto.
+    Por lo tanto, muestra automáticamente un valor de la propiedad modelo en un cuadro de texto y viceversa.
+
+    Resultado HTML:
+
+        @model Student
+
+        @Html.TextBox("StudentName", null, new { @class = "form-control" })
+
+    Esto da el siguiente resultado:
+
+        <input class="form-control"  id="StudentName"  name="StudentName"  type="text" value="" />
+
+    En el ejemplo anterior, el primer parámetro es la propiedad "StudentName" de la clase de modelo de Student que se establecerá
+        como nombre e identificación del cuadro de texto.
+    El segundo parámetro es un valor para mostrar en un cuadro de texto, que es nulo en el ejemplo anterior porque
+        el método TextBox() mostrará automáticamente un valor de la propiedad StudentName en el cuadro de texto.
+    El tercer parámetro se establecerá como atributo de clase.
+    El parámetro HtmlAttributes es un tipo de objeto, por lo que puede ser un objeto anónimo y el nombre de los atributos serán sus
+        propiedades que comienzan con el símbolo @.
+
+    También puede especificar cualquier nombre para el cuadro de texto. Sin embargo, no se unirá a un modelo.
+
+        @Html.TextBox("myTextBox", "This is value", new { @class = "form-control" })
+
+    Resultado HTML:
+
+        <input class="form-control"  id="myTextBox"  name="myTextBox"  type="text"  value="This is value" />
+
+>   TextBoxFor
+
+    El método de ayuda TextBoxFor es un método de extensión fuertemente tipado.
+    Genera un elemento de entrada de texto para la propiedad modelo especificada mediante una expresión lambda.
+    El método TextBoxFor enlaza una propiedad de objeto Model especificada para ingresar texto.
+    Por lo tanto, muestra automáticamente un valor de la propiedad modelo en un cuadro de texto y viceversa.
+    Definición:
+
+    •   MvcHtmlString TextBoxFor(Expression<Func<TModel,TValue>> expression, object htmlAttributes)
+
+    Ver el siguiente ejemplo:
+
+        @model Student
+
+        @Html.TextBoxFor(m => m.StudentName, new { @class = "form-control" })
+
+    Resultado HTML:
+
+        <input class="form-control"  id="StudentName"  name="StudentName"  type="text"  value="John" />
+
+    En el ejemplo anterior, el primer parámetro en el método TextBoxFor() es una expresión lambda que especifica la propiedad StudentName
+        para enlazar con el cuadro de texto.
+    Genera un elemento de texto de entrada con id & name establecido en nombre de propiedad.
+    El atributo de valor se establecerá en el valor de una propiedad StudentName, por ejemplo, John.
+
+♫   Diferencia entre TextBox y TextBoxFor
+    ♪   @Html.TextBox() es un método vagamente escrito mientras que @Html.TextBoxFor() es un método de extensión fuertemente tipado (genérico).
+    ♪   TextBox() requiere nombre de propiedad como parámetro de cadena, mientras que TextBoxFor() requiere la expresión lambda como parámetro.
+    ♪   TextBox no le da error de tiempo de compilación si ha especificado un nombre de propiedad incorrecto. Se lanzará excepción de tiempo de ejecución.
+    ♪   TextBoxFor es un método genérico, por lo que le dará un error de tiempo de compilación si ha especificado cambios incorrectos
+            en el nombre de la propiedad o en el nombre de la propiedad. (La vista provista no se compila en tiempo de ejecución).

@@ -1,0 +1,156 @@
+IX      MODEL BINDING
+
+>   Intro
+
+    Para comprender el Model Binding en MVC, primero veamos cómo puede obtener los valores de Http Request en el método de
+        acción usando el estilo tradicional ASP.NET.
+    La siguiente figura muestra cómo puede obtener los valores de [HttpGET] y [HttpPOST] mediante el uso del objeto Request
+        directamente en el método de acción.
+
+        // [HttpGET]    ►    /Student/Edit?id=1
+        public ActionResult Edit()
+        {
+            var id = Request.QueryString("id");
+            
+            // retrieve from database
+            
+            return View();
+        }
+
+        // [HttpPOST]   ►   /Student/Edit
+        public ActionResult Edit()
+        {
+            var id = Request["StudentId"];
+            var name = Request["StudentName"];
+            var age = Request["Age"];
+
+            // update database
+
+            return RediretToAction("Index");
+        }
+
+    Como puede ver en la figura anterior, usamos el objeto Request.QueryString and Request (Request.Form) para obtener el valor de [HttpGET] y [HttpPOST] request.
+    Acceder a los valores de solicitud utilizando el objeto Request es una actividad incómoda y representa una de pérdida de tiempo.
+    
+    Con el Model Binding, el Framweork MVC convierte los valores de solicitud http (de una cadena de consulta o colección de formularios) en parámetros de métodos de acción.
+        Estos parámetros pueden ser de tipo primitivo o complejo.
+
+>   Binding to Primitive type
+
+    El Request [HttpGET] incrusta datos en una query string.
+    El Framework MVC convierte automáticamente una cadena de consulta a los parámetros del método de acción.
+    Por ejemplo, el query string "id" en la siguiente solicitud GET se asignaría automáticamente al parámetro id del Action Method Edit().
+
+        public ActionResult Edit(int id)
+        {
+            var std = studentList.Where(s => s.StudentId == id).FirstOrDefault();
+            return View(std);
+        }
+
+    También puede tener múltiples parámetros en el Action Method con diferentes tipos de datos.
+    Los valores del query string se convertirán en parámetros en función del nombre coincidente.
+    Por ejemplo, http://localhost/Student/Edit?Id=1&name=John se asignará a los parámetros id y name del siguiente método de acción Edit.
+
+        public ActionResult Edit(int id, string name)
+        {            
+            // do something here                    
+            return View();
+        }
+
+>   Binding to Complex type
+
+    El Model Binding también funciona en tipos complejos.
+    El Model Binding en el Framework MVC convierte automáticamente los datos de campo de formulario de la solicitud [HttpPOST] a las propiedades de un
+        parámetro de tipo complejo de un método de acción.
+    Considera las siguientes clases de modelos:
+
+        public class Student
+        {
+            public int StudentId { get; set; }
+            [Display(Name="Name")]
+            public string StudentName { get; set; }
+            public int Age { get; set; }
+            public Standard standard { get; set; }
+        }
+
+        public class Standard
+        {
+            public int StandardId { get; set; }
+            public string StandardName { get; set; }
+        }
+
+    Ahora, puede crear un Action Method que incluya el parámetro de tipo de Student.
+    En el siguiente ejemplo, el método de acción Edit (HttpPost) incluye el parámetro de tipo de Student.
+
+        [HttpPost]
+        public ActionResult Edit(Student std)
+        {
+            var id = std.StudentId;
+            var name = std.StudentName;
+            var age = std.Age;
+            var standardName = std.standard.StandardName;
+
+            //update database here..
+
+            return RedirectToAction("Index");
+        }
+
+    ♥   FormCollection:
+
+        También se puede incluir el parámetro de tipo FormCollection en el método de acción en lugar del tipo complejo,
+            para recuperar todos los valores de los campos de formulario de vista como se muestra a continuación.
+
+            [HttpPost]
+            public ActionResult Edit(FormCollection values)
+            {
+                var name = values["StudentName"];
+                var age = values["Age"];
+                // update database
+                return RedirectToAction("Index");
+            }
+
+>   Bind Attribute
+
+    ASP.NET MVC Framework también le permite especificar qué propiedades de una clase de modelo desea vincular.
+    El atributo [Bind] le permitirá especificar las propiedades exactas que debe incluir o excluir una carpeta de modelos en el enlace.
+    En el siguiente ejemplo, el método de acción Editar solo vinculará la propiedad StudentId y StudentName de un modelo de Student.
+
+        [HttpPost]
+        public ActionResult Edit([Bind(Include = "StudentId, StudentName")] Student std)
+        {
+            var name = std.StudentName;
+            //write code to update student
+            return RedirectToAction("Index");
+        }
+
+    También puede usar las propiedades Exclude como se muestra a continuación.
+
+        [HttpPost]
+        public ActionResult Edit([Bind(Exclude = "Age")] Student std)
+        {
+            var name = std.StudentName;
+            //write code to update student
+            return RedirectToAction("Index");
+        }
+
+    El atributo Bind mejorará el rendimiento solo por las propiedades de enlace que usted necesitaba.
+
+>   Inside Model Binding
+
+    Como ha visto, el Model Binding convierte automáticamente los valores de solicitud en un objeto de tipo primitivo o complejo.
+    El Model Binding es un proceso de dos pasos. Primero, recopila los valores de la solicitud http entrante y, segundo,
+        llena el tipo primitivo o complejo con estos valores.
+    Los proveedores de valores son responsables de recopilar los valores de la solicitud y
+        los Enlazadores de modelos son responsables de completar los valores.
+
+    La colección del proveedor de valor predeterminado evalúa los valores de las siguientes fuentes:
+
+    1.  Parámetros de Action previamente vinculados, cuando la Action es una Action secundaria
+    2.  Campos de formulario (Request.Form)
+    3.  Los valores de propiedad en el Request Body JSON (Request.InputStream),
+            pero solo cuando la solicitud es una solicitud AJAX
+    4.  Datos de ruta (RouteData.Values)
+    5.  Parámetros de la cadena de consulta (Request.QueryString)
+    6.  Archivos publicados (Request.Files)
+
+    MVC incluye la clase DefaultModelBinder que enlaza efectivamente la mayoría de los tipos de modelos.

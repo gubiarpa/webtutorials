@@ -1,0 +1,20 @@
+VII     MODEL
+
+>   Intro
+
+    El modelo representa los datos específicos del dominio y la lógica de negocio en la arquitectura MVC.
+    Mantiene los datos de la aplicación. Los objetos del modelo recuperan y almacenan el estado del modelo en el almacén de persistencia como una base de datos.
+    La clase modelo tiene datos en propiedades públicas.
+    Todas las clases del modelo residen en la carpeta del modelo en la estructura de la carpeta MVC.
+    Aquí un ejemplo:
+
+        namespace MVC_BasicTutorials.Models
+        {
+            public class Student
+            {
+                public int StudentId { get; set; }
+                public string StudentName { get; set;  }
+                public int Age { get; set;  }
+            }
+        }
+

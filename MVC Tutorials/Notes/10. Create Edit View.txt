@@ -1,0 +1,145 @@
+X       CREATE EDIT VIEW
+
+>   Intro
+
+    Ya hemos creado la vista de índice en la sección anterior.
+    En esta sección, crearemos la vista Editar utilizando una plantilla de andamio predeterminada como se muestra a continuación.
+    El usuario puede actualizar los datos existentes de los estudiantes utilizando la vista Edit.
+
+        // [HttpGET]    ►    /Student/Edit?id=1
+        public ActionResult Edit()
+        {
+            var id = Request.QueryString("id");
+            
+            // retrieve from database
+            
+            return View();
+        }
+
+        // [HttpPOST]   ►   /Student/Edit
+        public ActionResult Edit()
+        {
+            var id = Request["StudentId"];
+            var name = Request["StudentName"];
+            var age = Request["Age"];
+
+            // update database
+
+            return RediretToAction("Index");
+        }
+
+    La figura anterior ilustra los siguientes pasos:
+
+    1.  El usuario hace clic en el enlace Editar en la vista de índice que enviará la solicitud
+            [HttpGET] http://localhost/student/edit/{Id} con el parámetro Id correspondiente en el query string.
+        Este Request será manejado por el Action Method Edit de HttpGET
+            (de manera predeterminada, el método de acción maneja la solicitud HttpGET si no se especifica ningún atributo)
+    2.  El Action Method Edit de HttpGet buscará los datos del alumno de la base de datos, en función del parámetro de Id provisto
+            y mostrará la vista Edit con esos datos del alumno en particular.
+    3.  El usuario puede editar los datos y hacer clic en el botón Guardar en la vista Edit.
+        El botón Guardar enviará una solicitud [HttpPOST] http://localhost/Student/Edit con la recopilación de datos del formulario.
+    4.  El Action Method Edit [HttpPOST] en StudentController finalmente actualizará los datos en la base de datos y
+            mostrará una página de índice con los datos actualizados utilizando el método RedirectToAction como un cuarto paso.
+
+    Así que este será el proceso completo para editar los datos usando la vista Edit en ASP.NET MVC.
+    Así que vamos a empezar a implementar los pasos anteriores.
+    Utilizaremos la siguiente clase de modelo de Student para nuestra vista Edit.
+
+        /* Model: Student */
+        public class Student
+        {
+            public int StudentId { get; set; }
+
+            [Display(Name = "Estudiante")]
+            public string StudentName { get; set; }
+
+            [Display(Name = "Edad")]
+            public int Age { get; set; }
+        }
+
+        /* Controller: Student */
+        public class StudentController : Controller
+        {
+            // Attribute
+            private List<Student> _studentList = new List<Student> {
+                new Student() { StudentId = 1, StudentName = "John", Age = 18 },
+                new Student() { StudentId = 2, StudentName = "Steve",  Age = 21 },
+                new Student() { StudentId = 3, StudentName = "Bill",  Age = 25 },
+                new Student() { StudentId = 4, StudentName = "Ram" , Age = 20 },
+                new Student() { StudentId = 5, StudentName = "Ron" , Age = 31 },
+                new Student() { StudentId = 4, StudentName = "Chris" , Age = 17 },
+                new Student() { StudentId = 4, StudentName = "Rob" , Age = 19 }
+            };
+
+            // GET: Student
+            public ActionResult Index()
+            {   
+                return View(_studentList);
+            }
+
+            // GET: Student
+            public ActionResult Edit(int Id)
+            {
+                //Get the student from studentList sample collection for demo purpose.
+                //Get the student from the database in the real application
+                
+                var std = _studentList.Find(s => s.StudentId == Id);
+                return View(std);
+            }
+        }
+    
+        /* View: Edit (Student) */
+        @model MVC_BasicTutorials.Models.Student
+        @{
+            ViewBag.Title = "Edit";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+        }
+
+        <h2>Edit</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            
+            <div class="form-horizontal">
+                <h4>Student</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.StudentId)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StudentName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.StudentName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger"< })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    
+    Tenga en cuenta que Edit.cshtml incluye el método HtmlHelper @using(Html.BeginForm ()) para crear un elemento de formulario html.
+    Html.BeginForm envía una solicitud [HttpPOST] por defecto.
+
+    Como puede ver en el código anterior, el método Edit() requiere un objeto Student como parámetro de entrada.
+    La vista Edit() vinculará automáticamente la recopilación de datos del formulario al parámetro del modelo de Student.
+    Por favor, visite la sección de vinculación de modelos para más información.
+    Aquí, puede actualizar la información a la base de datos y redirigirla a la acción Index.
+    Ahora, al hacer clic en el botón Save en la vista Edit, se guardará la información actualizada y se la redirigirá al método de acción Index().
+    De esta manera, puede proporcionar la funcionalidad de edición utilizando una plantilla de edición de andamios predeterminada.
+    Sin embargo, también puede crear una vista de edición sin utilizar una plantilla de Scaffolding de edición.

@@ -1,0 +1,65 @@
+V       ACTION SELECTOR
+
+>   Intro
+
+    El Action Selector es el atributo que se puede aplicar a los Action Method.
+    Ayuda al motor de routing a seleccionar el método de acción correcto para manejar una solicitud en particular.
+    MVC 5 incluye los siguientes atributos de selector de acción:
+
+        -   ActionName
+        -   Sin acción
+        -   Verbos de acción
+
+>   ActionName
+
+    El atributo ActionName nos permite especificar un ActionName diferente al nombre del método.
+    Considere el siguiente ejemplo.
+
+        public class StudentController : Controller
+        {
+            public StudentController()
+            {
+
+            }
+            
+            [ActionName("find")]
+            public ActionResult GetById(int id)
+            {
+                // get student from the database 
+                return View();
+            }
+        }
+
+    En el ejemplo anterior, hemos aplicado el atributo ActionName("find") al método de acción GetById.
+    Así que ahora, el nombre de la acción es "find" en lugar de "GetById".
+    Este método de acción se invocará en la solicitud http://localhost/student/find/1 en lugar de la solicitud http://localhost/student/getbyid/1.
+
+>   NonAction
+
+    El atributo selector de NonAction indica que un método público de un controlador no es un método de acción.
+    Use el atributo NonAction cuando quiera un método público en un controlador pero no quiera tratarlo como un método de acción.
+
+    Por ejemplo, el método público GetStudent() no se puede invocar de la misma manera que el Action Method en el siguiente ejemplo.
+
+        public class StudentController : Controller
+        {
+            public StudentController()
+            {
+
+            }
+        
+            [NonAction]
+            public Student GetStudnet(int id)
+            {
+                return studentList.Where(s => s.StudentId == id).FirstOrDefault();
+            }
+        }
+
+♫   Puntos para recordar :
+    ♪   El motor de enrutamiento MVC framework utiliza los atributos de los selectores de acción para determinar qué Action Method invocar.
+    ♪   Tres atributos de selectores de acción están disponibles en MVC 5
+        -   ActionName
+        -   NonAction
+        -   ActionVerbs
+    ♪   El atributo ActionName se utiliza para especificar un nombre de acción diferente al nombre del método.
+    ♪   El atributo NonAction marca el método público de la clase de Controller como un método de no acción. No puede ser invocado.

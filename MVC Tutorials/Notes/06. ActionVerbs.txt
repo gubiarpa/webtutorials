@@ -1,0 +1,102 @@
+VI      ACTION VERBS
+
+>   Intro
+
+    El selector ActionVerbs se utiliza cuando desea controlar la selección de un Action Method basado en un método de solicitud Http.
+    Por ejemplo, puede definir dos métodos de acción diferentes con el mismo nombre, pero un método de acción responde a una solicitud HTTP Get
+        y otro método de acción responde a una solicitud HTTP Post.
+    MVC framework admite diferentes ActionVerbs, como HttpGet, HttpPost, HttpPut, HttpDelete, HttpOptions y HttpPatch.
+    Puede aplicar estos atributos al método de acción para indicar el tipo de solicitud Http que admite el método de acción.
+    Si no aplica ningún atributo, entonces se considera una solicitud GET de forma predeterminada.
+
+    La siguiente figura ilustra los verbos de acción HttpGET y HttpPOST.
+
+        /* (HttpGET) http:localhost/Student/Edit/1 */
+        public ActionResult Edit(int id)
+        {
+            var std = students.Where(s => s.StudentId == Id).FirstOrDefault();
+
+            return View(std);
+        }
+
+        /* (HttpPOST) http:localhost/Student/Edit */
+        public ActionResult Edit(Student id)
+        {
+            // Update database here...
+
+            return RedirectToAction("Index");
+        }
+
+>   Some ActionVerbs
+
+    La siguiente tabla muestra los ActionVerbs más usados (https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html):
+
+        GET             Para recuperar la información del servidor. Los parámetros se agregarán en la cadena de consulta.
+        POST            Para CREAR un nuevo recurso.
+        PUT             Para ACTUALIZAR un recurso existente.
+        HEAD            Idéntico a GET, excepto que el servidor no devuelve el cuerpo del mensaje.
+        OPTIONS         El método OPCIONES representa una solicitud de información sobre las opciones de comunicación admitidas por el servidor web.
+        DELETE          Para ELIMINAR un recurso existente.
+        PATCH           Para ACTUALIZAR TOTAL O PARCIALMENTE el recurso.
+
+    El siguiente ejemplo muestra diferentes métodos de acción compatibles con diferentes ActionVerbs:
+
+        public class StudentController : Controller
+        {
+            public ActionResult Index()
+            {
+                return View();
+            }
+
+            [HttpPost]
+            public ActionResult PostAction()
+            {
+                return View("Index");
+            }
+
+
+            [HttpPut]
+            public ActionResult PutAction()
+            {
+                return View("Index");
+            }
+
+            [HttpDelete]
+            public ActionResult DeleteAction()
+            {
+                return View("Index");
+            }
+
+            [HttpHead]
+            public ActionResult HeadAction()
+            {
+                return View("Index");
+            }
+            
+            [HttpOptions]
+            public ActionResult OptionsAction()
+            {
+                return View("Index");
+            }
+            
+            [HttpPatch]
+            public ActionResult PatchAction()
+            {
+                return View("Index");
+            }
+        }
+
+    También puede aplicar varios verbos http utilizando el atributo AcceptVerbs.
+    El método GetAndPostAction es compatible con GET y POST ActionVerbs en el siguiente ejemplo:
+
+        [AcceptVerbs(HttpVerbs.Post | HttpVerbs.Get)]
+        public ActionResult GetAndPostAction()
+        {
+            return RedirectToAction("Index");
+        }
+
+♫   Puntos para recordar :
+    ♪   ActionVerbs son otros selectores de acción que seleccionan un método de acción basado en métodos de solicitud, por ejemplo, POST, GET, PUT, etc.
+    ♪   Múltiples métodos de acción pueden tener el mismo nombre con diferentes verbos de acción.
+        Las reglas de sobrecarga de métodos son aplicables.
+    ♪   Se pueden aplicar verbos de acción múltiple a un método de acción simple utilizando el atributo AcceptVerbs.

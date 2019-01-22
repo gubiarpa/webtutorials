@@ -1,0 +1,57 @@
+XII     HTML HELPERS
+
+>   Intro
+
+    En esta sección, aprenderá qué son los HTML Helpers y cómo usarlos en las vistas Razor.
+    La clase HtmlHelper genera elementos Html usando el objeto de clase de modelo en la vista Razor.
+    Enlaza el objeto del modelo a los elementos html para mostrar el valor de las propiedades del modelo en los elementos html
+        y también asigna el valor de los elementos html a las propiedades del modelo al enviar el formulario web.
+    Así que siempre use la clase HtmlHelper en la vista Razor en lugar de escribir las etiquetas Html manualmente.
+    La siguiente figura muestra el uso de la clase HtmlHelper en la vista Razor.
+
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StudentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Age)
+                </th>
+                <th></th>
+            </tr>
+            ...
+        </table>
+
+    Como puede ver en la figura anterior, @Html es un objeto de la clase HtmlHelper.
+    (El símbolo @ se usa para acceder al objeto del lado del servidor en la sintaxis Razor).
+    Html es una propiedad de tipo HtmlHelper incluida en la clase base de la vista Razor WebViewPage.
+    
+    ActionLink() y DisplayNameFor() son métodos de extensión incluidos en la clase HtmlHelper.
+    La clase HtmlHelper genera elementos html.
+    Por ejemplo, @Html.ActionLink("Create New", "Create") generará una etiqueta de anclaje <a href="/Student/Create">Create New</a>.
+    Hay muchos métodos de extensión para la clase HtmlHelper, que crea diferentes controles Html.
+
+>   La siguiente tabla enumera los métodos HtmlHelper y el control html que genera cada método.
+
+        HtmlHelper          Strogly Typed HtmlHelpers	Html Control
+        Html.ActionLink     Anchor                      link
+        Html.TextBox        Html.TextBoxFor             Textbox
+        Html.TextArea       Html.TextAreaFor            TextArea
+        Html.CheckBox       Html.CheckBoxFor            Checkbox
+        Html.RadioButton	Html.RadioButtonFor         Radio button
+        Html.DropDownList	Html.DropDownListFor        Dropdown, combobox
+        Html.ListBox        Html.ListBoxFor             multi-select list box
+        Html.Hidden         Html.HiddenFor              Hidden field
+        Password            Html.PasswordFor            Password textbox
+        Html.Display        Html.DisplayFor             Html text
+        Html.Label          Html.LabelFor               Label
+        Html.Editor         Html.EditorFor              Generates Html controls based on data type of specified model
+                                                        property e.g. textbox for string property, numeric field for
+                                                        int, double or other numeric type.
+
+    La diferencia entre llamar a los métodos HtmlHelper y usar etiquetas html es que el método HtmlHelper está diseñado para
+        facilitar el enlace para ver datos o datos de modelos.
+    Aprende sobre varios métodos de HtmlHelper en las siguientes secciones.

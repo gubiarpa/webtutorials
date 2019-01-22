@@ -1,0 +1,47 @@
+III     CONTROLLER
+
+El controlador en la arquitectura MVC maneja cualquier solicitud de URL entrante (Request).
+El controlador es una clase, derivada de la clase base System.Web.Mvc.Controller.
+La clase de controlador contiene métodos públicos llamados métodos de acción.
+El controlador y su método de acción manejan las solicitudes entrantes del navegador,
+    recuperan los datos necesarios del modelo y devuelven las respuestas apropiadas.
+
+Scaffolding es un marco de generación automática de código para aplicaciones web ASP.NET.
+Éste reduce el tiempo necesario para desarrollar un controlador, una vista, etc. en el marco MVC.
+Puede desarrollar una plantilla de Scaffolding personalizada utilizando plantillas T4 (https://en.wikipedia.org/wiki/Text_Template_Transformation_Toolkit)
+    según su arquitectura y estándar de codificación.
+
+La clase StudentController deriva de la clase Controller.
+Cada controlador en MVC debe derivarse de esta clase de controlador abstracta.
+Esta clase de Controlador base contiene métodos de ayuda que pueden usarse para varios propósitos.
+
+Ahora, devolveremos una cadena ficticia desde el método de acción Index del StudentController anterior.
+A continuación, se muestra el cambio del tipo de método Index de retorno de ActionResult a string y el retorno de string ficticio.
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc; // namespace de Controller
+
+    namespace MVC_BasicTutorials.Controllers
+    {
+        public class StudentController : Controller
+        {
+            // GET: Student
+            public string Index()
+            {
+                    return "This is Index action method of StudentController";
+            }
+        }
+    }
+
+♫   Puntos para recordar :
+    ♪   Un controlador maneja las solicitudes de URL entrantes.
+        El enrutamiento MVC envía la solicitud al controlador apropiado y al método de acción según la URL y las rutas configuradas.
+    ♪   Todos los métodos públicos en la clase Controller se denominan métodos de acción.
+    ♪   Una clase de Controller debe derivarse de la clase System.Web.Mvc.Controller.
+    ♪   Un nombre de clase de controlador debe terminar con "Controller".
+    ♪   Un controlador puede ser creado usando diferentes plantillas de Scaffolding.
+        También puede crear una plantilla de andamios personalizada.
+

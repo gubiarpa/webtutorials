@@ -1,0 +1,82 @@
+VIII        VIEW
+
+>   Intro
+
+    La vista es una interfaz de usuario y muestra los datos del modelo al usuario y también les permite modificar los datos.
+    Las vistas de ASP.NET MVC se almacenan en la carpeta Views.
+    Los diferentes Action Method de una sola clase de tipo Controller pueden generar diferentes vistas,
+        por lo que la carpeta de Views contiene una carpeta separada para cada controlador con el mismo nombre que el controlador,
+        para acomodar múltiples vistas.
+    Por ejemplo, las vistas, que se procesarán desde cualquiera de los métodos de acción de HomeController, residen en Views > Carpeta de inicio.
+    De la misma manera, las vistas que se procesarán desde StudentController, residirán en la carpeta "Views > Student".
+
+    OJO: La carpeta Shared contiene vistas, diseños o vistas parciales que se compartirán entre varias vistas.
+
+>   Razor View Engine
+
+    Microsoft presentó el motor de Razor view y se empaquetó con MVC 3.
+    Puede escribir una combinación de etiquetas HTML y código del lado del servidor en la vista Razor.
+    Razor usa el carácter @ para el código del lado del servidor en lugar del tradicional <%%>.
+    Puede usar la sintaxis de C# o VB para escribir el código del lado del servidor dentro de la vista Razor.
+    El motor de visualización de Razor maximiza la velocidad de escritura del código al minimizar el número de caracteres y
+        pulsaciones de teclas requeridas al escribir una vista.
+    Los archivos de vistas de Razor tienen extensión .cshtml o vbhtml. Ver la siguiente tabla:
+
+    .cshtml     C# Razor view. Supports C# with html tags.
+    .vbhtml     Visual Basic Razor view. Supports Visual Basic with html tags.
+    .aspx       ASP.Net web form
+    .ascx       ASP.NET web control
+
+>   Create New View
+
+    Es una buena práctica mantener el nombre de la vista igual que el nombre del método de acción para que no tenga que especificar explícitamente
+        el nombre de la vista en el método de acción al devolver la vista. Ver el siguiente ejemplo:
+
+        @model IEnumerable<MVC_BasicTutorials.Models.Student>
+
+        @{
+            ViewBag.Title = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+        }
+
+        <h2>Index</h2>
+
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StudentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Age)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Age)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id=item.StudentId }) |
+                        @Html.ActionLink("Details", "Details", new { id=item.StudentId  }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.StudentId })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    Ojo: Cada vista en el MVC de ASP.NET se deriva de la clase WebViewPage incluida en el espacio de nombres System.Web.Mvc.
+
+♫   Puntos para recordar :
+    ♪   View es una interfaz de usuario que muestra datos y maneja la interacción del usuario.
+    ♪   La carpeta Views contiene una carpeta separada para cada controlador.
+    ♪   ASP.NET MVC admite el motor de vista Razor además del motor tradicional .aspx.
+    ♪   Los archivos de Razor View tienen la extensión .cshtml o .vbhtml.

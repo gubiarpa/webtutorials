@@ -1,0 +1,100 @@
+IV      ACTION METHOD
+
+>   Intro
+
+    Todos los métodos *públicos* de una clase de controlador se denominan Action Methods (métodos de acción).
+    Son como cualquier otro método normal con las siguientes restricciones:
+
+        -   El método de acción debe ser público. No puede ser privado o protegido.
+        -   El método de acción no puede ser sobrecargado
+        -   El método de acción no puede ser un método estático.
+
+>   Default Action Method
+
+    Cada controlador puede tener un método de acción predeterminado según la ruta configurada en la clase RouteConfig.
+    Por defecto, Index es un método de acción predeterminado para cualquier controlador.
+
+>   ActionResult
+    
+    El Framework MVC incluye varias clases de resultados, que pueden devolverse desde los Action Method.
+    Las clases resultantes representan diferentes tipos de respuestas, como HTML, archivos, cadenas, json, javascript, etc.
+    La siguiente tabla enumera todas las clases de resultados disponibles en ASP.NET MVC.
+
+        -   ViewResult                                              Representa HTML y marcado (XML).
+        -   EmptyResult                                             Representa respuesta nula.
+        -   ContentResult                                           Representa cadena literal.
+        -   FileContentResult/ FilePathResult/ FileStreamResult     Representa el contenido de un archivo.
+        -   JavaScriptResult                                        Representar un script de JavaScript.
+        -   JsonResult                                              Representa a JSON que puede ser usado en AJAX.
+        -   RedirectResult                                          Representa una redirección a una nueva URL.
+        -   RedirectToRouteResult                                   Representa otra acción del mismo u otro controlador.
+        -   PartialViewResult                                       Devuelve HTML desde vista parcial
+        -   HttpUnauthorizedResult                                  Devuelve el estado HTTP 403
+
+    La clase ActionResult es una clase base de todas las clases de resultados anteriores,
+        por lo que puede ser el tipo de retorno de los métodos de acción que devuelve cualquier tipo de resultado enumerado anteriormente.
+
+        public class StudentController : Controller
+        {
+            public ActionResult Index()
+            {
+                return View();
+            }
+        }
+
+
+    Sin embargo, puede especificar la clase de resultado adecuada como un tipo de retorno de método de acción.
+    El método Index() de StudentController en la figura anterior utiliza el método View() para devolver un ViewResult (que se deriva de ActionResult).
+    El método View() se define en la clase de controlador base.
+
+    También contiene diferentes métodos, que devuelven automáticamente un tipo particular de resultado como se muestra en la siguiente tabla.
+
+        -   ViewResult                                              Representa HTML y marcado (XML).                            View()
+        -   EmptyResult                                             Representa una respuesta nula.
+        -   ContentResult                                           Representa cadena literal.                                  Content()
+        -   FileContentResult, FilePathResult, FileStreamResult     Representa el contenido de un archivo.                      File()
+        -   JavaScriptResult                                        Representar un script de JavaScript.                        JavaScript()
+        -   JsonResult                                              Representa a JSON que puede ser usado en AJAX.              Json()
+        -   RedirectResult                                          Representa una redirección a una nueva URL.                 Redirect()
+        -   RedirectToRouteResult                                   Representa otra acción del mismo u otro controlador.        RedirectToRoute()
+        -   PartialViewResult                                       Devuelve HTML desde vista parcial                           PartialView()
+        -   HttpUnauthorizedResult                                  Devuelve el estado HTTP 403                                 403 status
+
+>   Action Method Parameters
+
+    Cada Action Method puede tener parámetros de entrada como métodos normales.
+    Puede ser un tipo de datos primitivo o parámetros de tipo complejo como se muestra en el siguiente ejemplo.
+
+        [HttpPost]
+        public ActionResult Edit(Student std)
+        {
+            // update student to the database
+            
+            return RedirectToAction("Index");
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(int id)
+        {
+            // delete student from the database whose id matches with specified id
+
+            return RedirectToAction("Index");
+        }
+    
+    Los parámetros pueden ser tipos Nullable (que se les puede asignar el  valor null).
+
+    De forma predeterminada, los valores para los parámetros del método de acción se recuperan de la recopilación de datos de la solicitud.
+    La recopilación de datos incluye pares de "name/values" para datos de formulario, valores de cadena de consulta o valores de cookie.
+    El enlace de modelo en ASP.NET MVC asigna automáticamente la cadena de consulta de URL o la recopilación de datos de formulario
+        a los parámetros del método de acción si ambos nombres coinciden.
+
+♫   Puntos para recordar:
+    ♪   Todos los métodos públicos en la clase Controlador se denominan métodos de Acción.
+    ♪   El método de acción tiene las siguientes restricciones.
+        -   El método de acción debe ser público. No puede ser privado o protegido.
+        -   El método de acción no puede ser sobrecargado.
+        -   El método de acción no puede ser un método estático.
+    ♪   ActionResult es una clase base de todo el tipo de resultado que se devuelve del método Action.
+    ♪   La clase de controlador base contiene métodos que devuelven el tipo de resultado apropiado, por ejemplo,
+            View(), Content(), File(), JavaScript() etc.
+    ♪   El método de acción puede incluir parámetros de tipo Nullable.    

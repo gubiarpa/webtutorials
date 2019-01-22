@@ -1,0 +1,74 @@
+XIX     HTMLHELPER TEXTAREA
+
+>   Intro
+
+    La clase HtmlHelper incluye dos métodos de extensión para generar un elemento <textarea> multilínea en una vista Razor: TextArea() y TextAreaFor().
+    Por defecto, crea un área de texto con filas = 2 y cols = 20.
+    Usaremos el siguiente modelo Student el método TextArea() y TextAreaFor().
+
+        public class Student
+        {
+            public int StudentId { get; set; }
+            [Display(Name="Name")]
+            public string StudentName { get; set; }
+            public string Description { get; set; }
+        }
+
+>   TextArea
+
+    •   MvcHtmlString Html.TextArea(string name, string value, object htmlAttributes)
+
+    El método TextArea tiene muchas sobrecargas. Visite MSDN para conocer todas las sobrecargas del método TextArea.
+    El método TextArea() es un método que se escribe libremente porque el parámetro name es una cadena.
+    El parámetro name puede ser un nombre de propiedad del objeto modelo.
+    Enlaza una propiedad especificada con el área de texto.
+    Por lo tanto, muestra automáticamente el valor de la propiedad modelo en un área de texto y viceversa.
+
+        @model Student
+
+        @Html.TextArea("Description", null, new { @class = "form-control" })
+
+    Resultado HTML:
+
+        <textarea class="form-control" id="Description" name="Description" rows="2" cols="20">This is value</textarea>
+
+    En el ejemplo anterior, el primer parámetro es la propiedad "Descripción" de la clase de modelo Student, que se establecerá como
+        nombre e ID de área de texto.
+    El segundo parámetro es un valor para mostrar en un área de texto, que es nulo en el ejemplo anterior porque el método TextArea()
+        mostrará automáticamente un valor de la propiedad Description en el área de texto.
+    El tercer parámetro se establecerá como atributo de clase.
+    El parámetro HtmlAttributes es un tipo de objeto, por lo que puede ser un objeto anónimo y el nombre de los atributos
+        serán sus propiedades que comienzan con el símbolo @.
+    También puede especificar cualquier nombre para el área de texto.
+    Sin embargo, no estará ligado a un modelo.
+
+        @Html.TextArea("myTextArea", "This is value", new { @class = "form-control" })
+
+    Resultado HTML:
+
+        <textarea class="form-control" cols="20" id="myTextArea" name="myTextArea" rows="2">This is value</textarea>
+    
+>   TextAreaFor
+
+    El método Helper TextAreaFor es un método de extensión fuertemente tipado.
+    Genera un elemento de varias líneas <textarea> para la propiedad en el objeto modelo especificado mediante una expresión lambda.
+    El método TextAreaFor enlaza una propiedad de objeto modelo especificada al elemento textarea.
+    Por lo tanto, muestra automáticamente el valor de la propiedad modelo en un área de texto y viceversa.
+
+    •   MvcHtmlString TextAreaFor(<Expression<Func<TModel,TValue>> expression, object htmlAttributes)
+
+    A continuación, miremos la View().
+    
+        @model Student
+
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+
+    Resultado HTML:
+
+        <textarea class="form-control" cols="20" id="Description" name="Description" rows="2"></textarea>
+
+    En el ejemplo anterior, el primer parámetro en el método TextAreaFor() es una expresión lambda que especifica la propiedad del modelo
+        a vincular con el elemento textarea.
+    Hemos especificado la propiedad Description en el ejemplo anterior.
+    Por lo tanto, genera el elemento <textarea> con id & name establecido en nombre de propiedad - Descripción.
+    El valor de textarea se establecerá en el valor de una propiedad Descripción.
