@@ -1,0 +1,66 @@
+XV      HTMLHELPER TEXTAREA
+
+>   Intro
+
+    Aprenda a generar un control de casilla de verificación usando HtmlHelper en la vista Razor en esta sección.
+    La clase HtmlHelper incluye dos métodos de extensión para generar un elemento <input type = "checkbox"> en la vista Razor: CheckBox() y CheckBoxFor().
+    Usaremos el siguiente modelo Student con CheckBox() y el método CheckBoxFor().
+
+        public class Student
+        {
+            public int StudentId { get; set; }
+            [Display(Name="Name")]
+            public string StudentName { get; set; }
+            public int Age { get; set; }
+            public bool isNewlyEnrolled { get; set; }
+            public string Password { get; set; }
+        }
+
+>   CheckBox
+
+    El Html.CheckBox() es un método que se escribe libremente y genera un <input type = "checkbox"> con el nombre especificado, los atributos boolean isChecked y HTML.
+
+    •   MvcHtmlString CheckBox(string name, bool isChecked, object htmlAttributes)
+
+    Veamos el siguiente ejemplo:
+
+        @Html.CheckBox("isNewlyEnrolled", true)
+
+    Resultado HTML:
+
+        <input checked="checked" id="isNewlyEnrolled" name="isNewlyEnrolled" type="checkbox" value="true" />
+
+    En el ejemplo anterior, el primer parámetro es la propiedad "isNewlyEnrolled" de la clase de modelo Student que se establecerá como nombre
+        e identificación del cuadro de texto.
+    El segundo parámetro es un valor booleano, que marca o desmarca el CheckBox.
+
+>   CheckBoxFor
+
+    El método auxiliar CheckBoxFor es un método de extensión fuertemente tipado.
+    Genera el elemento <input type = "checkbox"> para la propiedad del modelo especificada mediante una expresión lambda.
+    El método CheckBoxFor enlaza una propiedad de objeto modelo especificada al elemento de casilla de verificación.
+    Por lo tanto, automáticamente marcó o desactivó un CheckBox basada en el valor de la propiedad.
+
+    •   MvcHtmlString CheckBoxFor(<Expression<Func<TModel,TValue>> expression, object htmlAttributes)
+
+    Ver el siguiente ejemplo:
+
+        @model Student
+
+        @Html.CheckBoxFor(m => m.isNewlyEnrolled)
+
+    Resultado HTML:
+
+        <input data-val="true"  data-val-required="The isNewlyEnrolled field is required." id="isNewlyEnrolled" name="isNewlyEnrolled" type="checkbox" value="true" />
+        <input name="isNewlyEnrolled" type="hidden" value="false" />
+
+    En el ejemplo anterior, el primer parámetro en el método CheckBoxFor() es una expresión lambda que especifica la
+        propiedad del modelo a vincular con el elemento de casilla de verificación.
+    Hemos especificado la propiedad isNewlyEnrolled en el ejemplo anterior.
+    Por lo tanto, genera el elemento <input type = "checkbox"> con id & name establecido en el nombre de la propiedad - se inscribe de forma nueva.
+    El atributo de valor se establecerá en el valor de una propiedad booleana isNewlyEnrolled.
+    En el resultado HTML anterior, observe que ha generado un campo oculto adicional con el mismo nombre y valor = falso.
+    Esto se debe a que cuando envía un formulario con una casilla de verificación, el valor solo se publica si la casilla de verificación está marcada.
+    Por lo tanto, si deja la casilla de verificación sin marcar, no se enviará nada al servidor cuando, en muchas situaciones, desee que se envíe falso en su lugar.
+    Como la entrada oculta tiene el mismo nombre que la casilla de verificación, entonces si la casilla de verificación no está marcada,
+        seguirá recibiendo un "falso" enviado al servidor.
