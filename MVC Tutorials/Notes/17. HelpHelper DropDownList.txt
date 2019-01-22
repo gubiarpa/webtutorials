@@ -1,0 +1,89 @@
+XVII    HTMLHELPER RADIOBUTTON
+
+>   Intro
+
+    Aprenda a generar el control de lista desplegable usando HtmlHelper en la vista Razor en esta sección.
+    La clase HtmlHelper incluye dos métodos de extensión para generar un elemento <select> en una vista Razor: DropDownList() y DropDownListFor().
+    Usaremos el siguiente modelo Student con el método DropDownList() y DropDownListFor().
+
+        public class Student
+        {
+            public int StudentId { get; set; }
+            [Display(Name="Name")]
+            public string StudentName { get; set; }
+            public Gender StudentGender { get; set; }
+        }
+
+        public enum Gender
+        {
+            Male,
+            Female    
+        }
+
+>   DropDownList
+
+    El método Html.DropDownList() genera un elemento de selección con un nombre específico, elementos de lista y atributos Html.
+
+    •   MvcHtmlString Html.DropDownList(string name, IEnumerable<SelectLestItem> selectList, string optionLabel, object htmlAttributes)
+
+    Veamos el siguiente ejemplo:
+
+        @using MyMVCApp.Models
+
+        @model Student
+
+        @Html.DropDownList("StudentGender", 
+                            new SelectList(Enum.GetValues(typeof(Gender))),
+                            "Select Gender",
+                            new { @class = "form-control" })
+
+    Resultado HTML:
+
+        <select class="form-control" id="StudentGender" name="StudentGender">
+            <option>Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+
+    En el ejemplo anterior, el primer parámetro es un nombre de propiedad para el que queremos mostrar los elementos de la lista.
+    El segundo parámetro es la lista de valores que se incluirán en la lista desplegable.
+        Hemos utilizado métodos de enumeración para obtener los valores de enumeración de género.
+    El tercer parámetro es una etiqueta que será el primer elemento de la lista y el cuarto parámetro es para los atributos html
+        como css que se aplicarán en la lista desplegable.
+    Tenga en cuenta que puede agregar el espacio de nombres de MyMVCApp.Models en la sección <namespaces> en web.config
+        en la carpeta Vistas en lugar de usar @ use para incluir los nombres en todas las vistas. 
+
+>   DropDownListFor
+
+    El método de ayuda DropDownListFor es un método de extensión fuertemente tipado.
+    Genera el elemento <select> para la propiedad especificada usando una expresión lambda.
+    El método DropDownListFor enlaza una propiedad de objeto modelo especificada al control de lista desplegable.
+    Por lo tanto, enumera automáticamente los elementos en DropDownList según el valor de la propiedad.
+
+    •   MvcHtmlString Html.DropDownListFor(
+            Expression<Func<dynamic,TProperty>> expression,
+            IEnumerable<SelectLestItem> selectList, string optionLabel, object htmlAttributes)
+
+    Veamos el siguiente ejemplo:
+
+        @using MyMVCApp.Models
+
+        @model Student
+
+        @Html.DropDownListFor(m => m.StudentGender, 
+                            new SelectList(Enum.GetValues(typeof(Gender))), 
+                            "Select Gender")
+
+    Resultado HTML:
+
+        <select class="form-control" id="StudentGender" name="StudentGender">
+            <option>Select Gender</option> 
+            <option>Male</option> 
+            <option>Female</option> 
+        </select>
+
+    En el ejemplo anterior, el primer parámetro en el método DropDownListFor() es una expresión lambda que especifica la propiedad del
+        modelo a vincular con el elemento seleccionado.
+    Hemos especificado la propiedad StudentGender de tipo enum.
+    El segundo parámetro especifica los elementos para mostrar en la lista desplegable mediante SelectList.
+    El tercer parámetro es optionLabel, que será el primer elemento de la lista desplegable.

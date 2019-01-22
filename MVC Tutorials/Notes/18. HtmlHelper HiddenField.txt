@@ -1,0 +1,21 @@
+XVIII   HTMLHELPER HIDDEN FIELD
+
+>   Intro
+
+    La clase HtmlHelper incluye dos métodos de extensión para generar un elemento de campo oculto (<input type = "hidden">)
+        en una vista Razor: Hidden() y HiddenFor().
+    Usaremos el siguiente modelo Student con el método Hidden() y Método HiddenFor().
+
+        public class Student
+        {
+            public int StudentId { get; set; }
+            [Display(Name="Name")]
+            public string StudentName { get; set; }
+            public int Age { get; set; }
+            public bool isNewlyEnrolled { get; set; }
+            public string Password { get; set; }
+        }
+
+>   Hidden
+
+    

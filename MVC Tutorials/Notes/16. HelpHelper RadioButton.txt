@@ -1,0 +1,63 @@
+XVI     HTMLHELPER RADIOBUTTON
+
+>   Intro
+
+    Aprenda a generar el control de botón de radio usando HtmlHelper en la vista Razor en esta sección.
+    La clase HtmlHelper incluye dos métodos de extensión para generar un elemento <input type = "radio"> en una vista Razor: RadioButton() y RadioButtonFor().
+    Usaremos el siguiente modelo de Student con el método RadioButton() y RadioButtonFor().
+
+        public class Student
+        {
+            public int StudentId { get; set; }
+            [Display(Name="Name")]
+            public string StudentName { get; set; }
+            public int Age { get; set; }
+            public string Gender { get; set; }
+        }
+    
+>   RadioButton
+
+    El método Html.RadioButton() crea un elemento de botón de radio con un nombre específico, isChecked boolean y Html.
+
+    •   MvcHtmlString RadioButton(string name, object value, bool isChecked, object htmlAttributes)
+
+    Veamos el siguiente ejemplo:
+
+        Male:   @Html.RadioButton("Gender","Male")
+        Female: @Html.RadioButton("Gender","Female")
+
+    Resultado HTML:
+
+        Male: <input checked="checked" id="Gender" name="Gender" type="radio" value="Male" />
+        Female: <input id="Gender" name="Gender" type="radio" value="Female" />
+
+    En el ejemplo anterior, hemos creado dos botones de opción para la propiedad "Gender".
+    El segundo parámetro es un valor que se enviará al servidor, si se marca el botón de opción correspondiente.
+    Si se selecciona el botón de opción Male, el valor de cadena "Masculino" se asignará a una propiedad modelo Género y se enviará al servidor.
+
+>   RadioButtonFor
+
+    El método de ayuda RadioButtonFor es un método de extensión fuertemente tipado.
+    Genera el elemento <input type = "radio"> para la propiedad especificada mediante una expresión lambda.
+    El método RadioButtonFor enlaza una propiedad de objeto modelo especificada al control RadioButton.
+    Así que automáticamente marcó o no marcó un RadioButton basado en el valor de la propiedad.
+
+    •   MvcHtmlString RadioButtonFor(<Expression<Func<TModel,TValue>> expression, object value, object htmlAttributes)
+
+    Veamos el siguiente ejemplo:
+
+        @model Student
+
+        @Html.RadioButtonFor(m => m.Gender,"Male")
+        @Html.RadioButtonFor(m => m.Gender,"Female")
+
+    Resultado HTML:
+
+        <input checked="checked" id="Gender" name="Gender" type="radio" value="Male" />
+        <input id="Gender" name="Gender" type="radio" value="Female" />
+
+    En el ejemplo anterior, el primer parámetro en el método RadioButtonFor() es una expresión lambda que especifica la propiedad del modelo
+        a vincular con el elemento RadioButton.
+    Hemos creado dos botones de opción para la propiedad Género en el ejemplo anterior.
+    Por lo tanto, genera dos elementos <input type = "RadioButton"> con id & name configurados como nombre de propiedad - Gender.
+    El segundo parámetro es un valor que se enviará al servidor cuando se envíe el formulario.
